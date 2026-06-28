@@ -1,0 +1,93 @@
+body{
+  margin:0;
+  background:#f4f7fb;
+  font-family:'Segoe UI',sans-serif;
+}
+
+.container{
+  width:90%;
+  max-width:1200px;
+  margin:auto;
+  padding:30px;
+}
+
+.header{
+  text-align:center;
+  margin-bottom:30px;
+}
+
+.header h1{
+  color:#2563eb;
+}
+
+.card{
+  background:white;
+  padding:25px;
+  border-radius:15px;
+  margin-bottom:25px;
+  box-shadow:0 4px 15px rgba(0,0,0,.08);
+}
+
+form{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:15px;
+}
+
+input{
+  padding:12px;
+  border:1px solid #ddd;
+  border-radius:8px;
+}
+
+.save-btn{
+  background:#2563eb;
+  color:white;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  padding:12px;
+}
+
+.save-btn:hover{
+  background:#1d4ed8;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+th{
+  background:#2563eb;
+  color:white;
+  padding:12px;
+}
+
+td{
+  padding:12px;
+  border-bottom:1px solid #ddd;
+}
+
+tr:hover{
+  background:#f9fafb;
+}
+
+.edit-btn{
+  background:#f59e0b;
+  color:white;
+  border:none;
+  padding:8px 12px;
+  border-radius:6px;
+  cursor:pointer;
+  margin-right:5px;
+}
+
+.delete-btn{
+  background:#ef4444;
+  color:white;
+  border:none;
+  padding:8px 12px;
+  border-radius:6px;
+  cursor:pointer;
+}
