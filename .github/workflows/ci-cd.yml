@@ -2,73 +2,94 @@ name: Book Management CI/CD
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+
     steps:
-    # 1. Checkout code
-    - name: Checkout repository
-      uses: actions/checkout@v4
 
-    #2 .Install AWS credentials
-    - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRETE_ACCESS_KEY }}
-        aws-region: ${{ secrets.AWS_REGION }}
-      
-    - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v2
+      # Checkout repository
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-    # 3. Set up Docker
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
+      - name: Check AWS secrets
+        run: |
+          if [ -z "${{ secrets.AWS_ACCESS_KEY_ID }}" ]; then
+            echo "AWS_ACCESS_KEY_ID missing"
+          else
+            echo "AWS_ACCESS_KEY_ID exists"
+          fi
 
-    # 4. Build & Push backend image
-    - name: Build and Push Backend
-      env:
-        REGISTRY: ${{ secrets.ECR_REGISTRY }}
-        REPOSITORY: ${{ secrets.ECR_REPO}}
-        IMAGE_TAG: latest
-      run: |
-        docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG ./book-management-system
-        docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+          if [ -z "${{ secrets.AWS_SECRET_ACCESS_KEY }}" ]; then
+            echo "AWS_SECRET_ACCESS_KEY missing"
+          else
+            echo "AWS_SECRET_ACCESS_KEY exists"
+          fi
 
-    # 5. Build & Push frontend image
-    - name: Build and Push Frontend
-      env:
-          REGISTRY: ${{ secrets.ECR_REGISTRY }}
-          REPOSITORY: ${{ secrets.ECR_REPO }}
-          IMAGE_TAG: latest
-      run: |
-          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG ./book-ui
-          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+      # Configure AWS Credentials
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
-    # 6. Run docker compose (test build)
-    - name: Run containers
-      run: docker compose up -d
+      # Login to Amazon ECR
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
 
-    # 7. Check running containers
-    - name: Verify containers
-      run: docker ps
+      # Setup Docker Buildx
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-    # 8. Login to Docker Hub
-    #- name: Login to Docker Hub
-    #  run: echo "${{ secrets.;=MMY-NjLc$4u9e }}" | docker login -u "${{ secrets.Buddhini Kaluwila }}" --password-stdin
+      ##################################################
+      # Build Backend Image
+      ##################################################
 
-    # 9. Build & Push Backend
-    #- name: Build & Push Backend
-     # run: |
-       # docker build -t buddhinikaluwila/book-backend ./book-management-system
-       # docker push buddhinikaluwila/book-backend
+      - name: Build Backend Docker Image
+        run: |
+          docker build \
+            -t ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:backend \
+            ./book-management-system
 
-    # 10. Build & Push Frontend
-    #- name: Build & Push Frontend
-     # run: |
-       # docker build -t buddhinikaluwila/book-frontend ./book-ui
-       # docker push buddhinikaluwila/book-frontend
+      ##################################################
+      # Build Frontend Image
+      ##################################################
+
+      - name: Build Frontend Docker Image
+        run: |
+          docker build \
+            -t ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:frontend \
+            ./book-ui
+
+      ##################################################
+      # Push Backend Image
+      ##################################################
+
+      - name: Push Backend Image
+        run: |
+          docker push \
+            ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:backend
+
+      ##################################################
+      # Push Frontend Image
+      ##################################################
+
+      - name: Push Frontend Image
+        run: |
+          docker push \
+            ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:frontend
+
+      ##################################################
+      # Verify Images
+      ##################################################
+
+      - name: Show Docker Images
+        run: docker images
