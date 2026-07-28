@@ -113,7 +113,7 @@ jobs:
           timeout: 30s
           command_timeout: 5m
           debug: true
-          script:
+          script: |
             cd /home/ubuntu
             echo "Connected to EC2"
             echo "Checking Docker..."
