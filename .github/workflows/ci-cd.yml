@@ -108,8 +108,23 @@ jobs:
         with: 
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
-          key: ${{ secrets.SSH_PRIVATE_KEY_EC2}}
-          script: 
+          key: ${{ secrets.SSH_PRIVATE_KEY_EC2 }}
+          port: 22
+          timeout: 30s
+          command_timeout: 5m
+          debug: true
+          script:
             cd /home/ubuntu
+            echo "Connected to EC2"
+            echo "Checking Docker..."
+            docker --version
+            echo "Checking Compose..."
+            docker compose version
+            echo "Pulling images..."
             docker compose pull
+            echo "Starting containers..."
             docker compose up -d --force-recreate
+            echo "Deployment completed"
+            docker ps
+
+
