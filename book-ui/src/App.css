@@ -1,93 +1,233 @@
-body{
-  margin:0;
-  background:#f4f7fb;
-  font-family:'Segoe UI',sans-serif;
+body {
+  margin: 0;
+  background: #e7e2d8;
+  color: #1c2430;
+  font-family: "Segoe UI", sans-serif;
 }
 
-.container{
-  width:90%;
-  max-width:1200px;
-  margin:auto;
-  padding:30px;
+button,
+input {
+  font: inherit;
 }
 
-.header{
-  text-align:center;
-  margin-bottom:30px;
+.gate {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
 }
 
-.header h1{
-  color:#2563eb;
+.gate-brand,
+.gate-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.card{
-  background:white;
-  padding:25px;
-  border-radius:15px;
-  margin-bottom:25px;
-  box-shadow:0 4px 15px rgba(0,0,0,.08);
+.gate-brand {
+  padding: 64px;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(196, 92, 38, 0.35), transparent 28%),
+    #1c2430;
+  color: #f6f1e7;
 }
 
-form{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:15px;
+.gate-brand h1,
+.gate-panel h1 {
+  margin: 0;
+  font-family: Georgia, "Palatino Linotype", serif;
+  font-size: clamp(48px, 7vw, 92px);
+  font-weight: 500;
+  letter-spacing: -1px;
 }
 
-input{
-  padding:12px;
-  border:1px solid #ddd;
-  border-radius:8px;
+.eyebrow {
+  margin: 0 0 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-size: 12px;
 }
 
-.save-btn{
-  background:#2563eb;
-  color:white;
-  border:none;
-  border-radius:8px;
-  cursor:pointer;
-  padding:12px;
+.gate-panel {
+  gap: 16px;
+  padding: 64px;
+  background: #f6f1e7;
 }
 
-.save-btn:hover{
-  background:#1d4ed8;
+.signup-btn,
+.login-btn,
+.logout-btn,
+.save-btn,
+.edit-btn,
+.delete-btn {
+  border-radius: 999px;
+  cursor: pointer;
 }
 
-table{
-  width:100%;
-  border-collapse:collapse;
+.signup-btn,
+.login-btn {
+  width: min(100%, 320px);
+  padding: 16px 22px;
+  font-size: 16px;
 }
 
-th{
-  background:#2563eb;
-  color:white;
-  padding:12px;
+.signup-btn {
+  border: none;
+  background: #1c2430;
+  color: #f6f1e7;
 }
 
-td{
-  padding:12px;
-  border-bottom:1px solid #ddd;
+.login-btn,
+.logout-btn {
+  border: 1px solid #1c2430;
+  background: transparent;
+  color: #1c2430;
 }
 
-tr:hover{
-  background:#f9fafb;
+.signup-btn:disabled,
+.login-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
 }
 
-.edit-btn{
-  background:#f59e0b;
-  color:white;
-  border:none;
-  padding:8px 12px;
-  border-radius:6px;
-  cursor:pointer;
-  margin-right:5px;
+.hint {
+  max-width: 360px;
+  margin: 8px 0 0;
+  color: #5c5348;
+  line-height: 1.5;
 }
 
-.delete-btn{
-  background:#ef4444;
-  color:white;
-  border:none;
-  padding:8px 12px;
-  border-radius:6px;
-  cursor:pointer;
+.workspace {
+  min-height: 100vh;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 22px 32px;
+  background: #f6f1e7;
+  border-bottom: 1px solid #d9d1c3;
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.role-badge {
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+}
+
+.role-badge.admin {
+  background: #c45c26;
+  color: white;
+}
+
+.role-badge.staff {
+  background: #1c2430;
+  color: #f6f1e7;
+}
+
+.logout-btn,
+.save-btn,
+.edit-btn,
+.delete-btn {
+  padding: 10px 16px;
+}
+
+.workspace-main {
+  width: min(1100px, calc(100% - 48px));
+  margin: 28px auto;
+}
+
+.card {
+  background: white;
+  padding: 24px;
+  border-radius: 18px;
+  margin-bottom: 20px;
+  border: 1px solid #e3dcd0;
+}
+
+.card h2 {
+  margin-top: 0;
+  font-family: Georgia, "Palatino Linotype", serif;
+  font-weight: 500;
+}
+
+form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+input {
+  padding: 12px 14px;
+  border: 1px solid #d9d1c3;
+  border-radius: 12px;
+  background: #fffdf8;
+}
+
+.save-btn {
+  grid-column: 1 / -1;
+  justify-self: start;
+  border: none;
+  background: #1c2430;
+  color: #f6f1e7;
+}
+
+.edit-btn {
+  border: none;
+  background: #c45c26;
+  color: white;
+  margin-right: 8px;
+}
+
+.delete-btn {
+  border: none;
+  background: #8f2d2d;
+  color: white;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  text-align: left;
+  padding: 12px;
+  color: #5c5348;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+td {
+  padding: 12px;
+  border-top: 1px solid #eee6da;
+}
+
+@media (max-width: 800px) {
+  .gate {
+    grid-template-columns: 1fr;
+  }
+
+  .gate-brand,
+  .gate-panel,
+  .topbar {
+    padding: 32px 20px;
+  }
+
+  .topbar,
+  form {
+    display: grid;
+  }
+
+  form {
+    grid-template-columns: 1fr;
+  }
 }
