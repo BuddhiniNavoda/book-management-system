@@ -1,33 +1,59 @@
-import React, { useState } from "react";
-import BookForm from "./components/BookForm";
-import BookList from "./components/BookList";
+import { useAuth0 } from "@auth0/auth0-react";
+import Landing from "./components/Landing";
+import Workspace from "./components/Workspace";
 import "./App.css";
 
-function App() {
-  const [selectedBook, setSelectedBook] = useState(null);
-  const [refresh, setRefresh] = useState(false);
+function App({ authConfigured = true }) {
+  if (!authConfigured) {
+    return <Landing authReady={false} />;
+  }
 
-  const handleSuccess = () => {
-    setSelectedBook(null);
-    setRefresh(!refresh);
-  };
+  return <AuthenticatedApp />;
+}
+
+function AuthenticatedApp() {
+  const {
+    isLoading,
+    isAuthenticated,
+    loginWithRedirect,
+    logout,
+    user,
+    getAccessTokenSilently,
+  } = useAuth0();
+
+  if (isLoading) {
+    return (
+      <main className="gate">
+        <section className="gate-panel">
+          <p className="eyebrow">Book Management</p>
+          <h1>Opening your session</h1>
+        </section>
+      </main>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <Landing
+        authReady
+        onLogin={() => loginWithRedirect()}
+        onSignup={() =>
+          loginWithRedirect({
+            authorizationParams: { screen_hint: "signup" },
+          })
+        }
+      />
+    );
+  }
 
   return (
-    <div className="container">
-      <div className="header">
-        <h1> Book Management System</h1>
-      </div>
-
-      <BookForm
-        selectedBook={selectedBook}
-        onSuccess={handleSuccess}
-      />
-
-      <BookList
-        refreshTrigger={refresh}
-        onEdit={setSelectedBook}
-      />
-    </div>
+    <Workspace
+      user={user}
+      getAccessTokenSilently={getAccessTokenSilently}
+      onLogout={() =>
+        logout({ logoutParams: { returnTo: window.location.origin } })
+      }
+    />
   );
 }
 
