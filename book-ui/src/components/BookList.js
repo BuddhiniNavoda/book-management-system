@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getBooks, deleteBook } from "../api";
 
-function BookList({ onEdit, refreshTrigger }) {
+function BookList({ onEdit, refreshTrigger, canDelete = false }) {
 
   const [books, setBooks] = useState([]);
 
@@ -66,12 +66,14 @@ function BookList({ onEdit, refreshTrigger }) {
                   Edit
                 </button>
 
-                <button
-                  className="delete-btn"
-                  onClick={() => handleDelete(book.id)}
-                >
-                  Delete
-                </button>
+                {canDelete && (
+                  <button
+                    className="delete-btn"
+                    onClick={() => handleDelete(book.id)}
+                  >
+                    Delete
+                  </button>
+                )}
 
               </td>
 
