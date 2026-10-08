@@ -2,16 +2,28 @@ import axios from "axios";
 
 const API_URL = "http://localhost:8080/books";
 
-export const getBooks = () => axios.get(API_URL);
+let tokenGetter = async () => null;
 
-export const getBookById = (id) =>
-  axios.get(`${API_URL}?id=${id}`);
+export const setTokenGetter = (getter) => {
+  tokenGetter = getter;
+};
 
-export const createBook = (book) =>
-  axios.post(API_URL, book);
+const api = axios.create();
 
-export const updateBook = (id, book) =>
-  axios.put(`${API_URL}?id=${id}`, book);
+api.interceptors.request.use(async (config) => {
+  const token = await tokenGetter();
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
-export const deleteBook = (id) =>
-  axios.delete(`${API_URL}?id=${id}`);
+export const getBooks = () => api.get(API_URL);
+
+export const getBookById = (id) => api.get(`${API_URL}?id=${id}`);
+
+export const createBook = (book) => api.post(API_URL, book);
+
+export const updateBook = (id, book) => api.put(`${API_URL}?id=${id}`, book);
+
+export const deleteBook = (id) => api.delete(`${API_URL}?id=${id}`);
