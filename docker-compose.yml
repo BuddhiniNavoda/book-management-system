@@ -26,10 +26,16 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/bookdb
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root123
+      AUTH0_ISSUER_URI: ${AUTH0_ISSUER_URI:-}
+      AUTH0_AUDIENCE: ${AUTH0_AUDIENCE:-https://book-api}
 
   frontend:
     build:
       context: ./book-ui
+      args:
+        REACT_APP_AUTH0_DOMAIN: ${REACT_APP_AUTH0_DOMAIN:-}
+        REACT_APP_AUTH0_CLIENT_ID: ${REACT_APP_AUTH0_CLIENT_ID:-}
+        REACT_APP_AUTH0_AUDIENCE: ${REACT_APP_AUTH0_AUDIENCE:-https://book-api}
     container_name: react-book-ui
     ports:
       - "3000:80"
